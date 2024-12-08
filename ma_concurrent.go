@@ -19,6 +19,12 @@ func (c *ConcurrentMovingAverage) Add(values ...float64) {
 	c.mux.Unlock()
 }
 
+func (c *ConcurrentMovingAverage) Reset() {
+	c.mux.Lock()
+	c.ma.Reset()
+	c.mux.Unlock()
+}
+
 func (c *ConcurrentMovingAverage) Avg() float64 {
 	c.mux.RLock()
 	defer c.mux.RUnlock()

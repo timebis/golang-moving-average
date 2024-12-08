@@ -171,3 +171,41 @@ func TestConcurrent(t *testing.T) {
 	}
 	wg.Wait()
 }
+
+func TestReset(t *testing.T) {
+	a := New(5)
+	a.Add(10, 20, 30, 40, 50)
+	if a.Count() != 5 {
+		t.Error("expected 5 values before reset, got", a.Count())
+	}
+	if a.Avg() < 29.999 || a.Avg() > 30.001 {
+		t.Error("unexpected average before reset, got", a.Avg())
+	}
+
+	a.Reset()
+
+	if a.Count() != 0 {
+		t.Error("expected 0 values after reset, got", a.Count())
+	}
+	if a.Avg() != 0 {
+		t.Error("expected average 0 after reset, got", a.Avg())
+	}
+	if len(a.Values()) != 0 {
+		t.Error("expected no values after reset, got", len(a.Values()))
+	}
+	if a.SlotsFilled() {
+		t.Error("expected slots not filled after reset")
+	}
+
+	a.Add(10, 20)
+
+	if a.Count() != 2 {
+		t.Error("expected 2 values after adding 2 values after reset, got", a.Count())
+	}
+	if a.Avg() < 14.999 || a.Avg() > 15.001 {
+		t.Error("unexpected average after adding 2 values after reset, got", a.Avg())
+	}
+	if a.SlotsFilled() {
+		t.Error("expected slots not filled after adding 2 values after reset")
+	}
+}

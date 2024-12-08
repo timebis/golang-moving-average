@@ -82,6 +82,11 @@ func (ma *MovingAverage) Add(values ...float64) {
 	}
 }
 
+func (ma *MovingAverage) Reset() {
+	ma.valPos = 0
+	ma.slotsFilled = false
+}
+
 func (ma *MovingAverage) SlotsFilled() bool {
 	return ma.slotsFilled
 }
